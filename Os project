@@ -1,0 +1,155 @@
+
+package project.os;
+
+import java.util.Scanner;
+
+class ProjectOS {
+
+    static void FF(int soBlock[], int b, int soProcess[], int p) {
+
+        int index[] = new int[p];
+        for (int i = 0; i < index.length; i++) {
+            index[i] = -1;
+        }
+
+        for (int i = 0; i < p; i++) {
+            for (int j = 0; j < b; j++) {
+                if (soBlock[j] >= soProcess[i]) {
+                    index[i] = j;
+                    soBlock[j] -= soProcess[i];
+                    break;
+                }
+            }
+        }
+
+        System.out.println("\nProcess Number\tProcess Size\tBlock Number");
+        for (int i = 0; i < p; i++) {
+            System.out.print(" " + (i + 1) + " \t\t " + soProcess[i] + " \t\t");
+            if (index[i] != -1) {
+                System.out.print(index[i] + 1);
+            } else {
+                System.out.print("Waiting for another process to finish");
+            }
+            System.out.println();
+
+        }
+
+    }
+
+    static void BF(int soBlock[], int b, int soProcess[], int p) {
+        int index[] = new int[p];
+
+        for (int i = 0; i < index.length; i++) {
+            index[i] = -1;
+        }
+
+        for (int i = 0; i < p; i++) {
+            int BIndex = -1;
+
+            for (int j = 0; j < b; j++) {
+
+                if (soBlock[j] >= soProcess[i]) {
+                    if (BIndex == -1) {
+                        BIndex = j;
+                    } else if (soBlock[BIndex] > soBlock[j]) {
+                        BIndex = j;
+                    }
+                }
+            }
+
+            if (BIndex != -1) {
+                index[i] = BIndex;
+                soBlock[BIndex] -= soProcess[i];
+            }
+        }
+
+        System.out.println("\nProcess Number\tProcess Size\tBlock Number");
+        for (int i = 0; i < p; i++) {
+            System.out.print(" " + (i + 1) + " \t\t " + soProcess[i] + " \t\t");
+            if (index[i] != -1) {
+                System.out.print(index[i] + 1);
+            } else {
+                System.out.print("Waiting for another process to finish");
+            }
+            System.out.println();
+
+        }
+    }
+
+    static void WF(int soBlock[], int b, int soProcess[], int p) {
+        int index[] = new int[p];
+
+        for (int i = 0; i < index.length; i++) {
+            index[i] = -1;
+        }
+
+        for (int i = 0; i < p; i++) {
+            int WIndex = -1;
+
+            for (int j = 0; j < b; j++) {
+                if (soBlock[j] >= soProcess[i]) {
+                    if (WIndex == -1) {
+                        WIndex = j;
+                    } else if (soBlock[WIndex] < soBlock[j]) {
+                        WIndex = j;
+                    }
+                }
+            }
+
+            if (WIndex != -1) {
+                index[i] = WIndex;
+                soBlock[WIndex] -= soProcess[i];
+            }
+        }
+
+        System.out.println("\nProcess Number\tProcess Size\tBlock Number");
+        for (int i = 0; i < p; i++) {
+            System.out.print(" " + (i + 1) + " \t\t " + soProcess[i] + " \t\t");
+            if (index[i] != -1) {
+                System.out.print(index[i] + 1);
+            } else {
+                System.out.print("Waiting for another process to finish");
+            }
+            System.out.println();
+        }
+
+    }
+
+    public static void main(String[] args) {
+        Scanner SC = new Scanner(System.in);
+        System.out.println("Enter number of Blocks: ");
+        int blockNumber = SC.nextInt();
+        System.out.println("Enter size of Blocks: ");
+        int sizeBlock[] = new int[blockNumber];
+        for (int i = 0; i < blockNumber; i++) {
+            sizeBlock[i] = SC.nextInt();
+        }
+        System.out.println("Enter number of processes: ");
+        int proccessNumber = SC.nextInt();
+        System.out.println("Enter size of processes: ");
+        int sizeProccess[] = new int[proccessNumber];
+        for (int i = 0; i < proccessNumber; i++) {
+            sizeProccess[i] = SC.nextInt();
+        }
+
+        System.out.println("Enter 1 to use FIRST FIT, Enter 2 to use BEST FIT, Enter 3 to use WORST FIT : ");
+        int type;
+        type = SC.nextInt();
+
+        if (type == 1) {
+            System.out.println("FIRST FIT");
+            FF(sizeBlock, blockNumber, sizeProccess, proccessNumber);
+
+        } else if (type == 2) {
+            System.out.println("BEST FIT");
+            BF(sizeBlock, blockNumber, sizeProccess, proccessNumber);
+        } else if (type == 3) {
+            System.out.println("WORST FIT");
+            WF(sizeBlock, blockNumber, sizeProccess, proccessNumber);
+
+        } else {
+            System.out.println("NOT FOUND TYPE");
+        }
+
+    }
+}
